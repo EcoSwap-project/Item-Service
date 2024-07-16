@@ -2,11 +2,20 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 
 	exchange "item_service/genproto/item_service"
 
 	"github.com/google/uuid"
 )
+
+type itemCategoryRepo struct {
+	db *sql.DB
+}
+
+func NewItemCategoryRepository(db *sql.DB) *itemCategoryRepo {
+	return &itemCategoryRepo{db}
+}
 
 // Item Categories
 func (r *EcoExchangeRepo) AddItemCategory(ctx context.Context, req *exchange.AddItemCategoryRequest) (*exchange.AddItemCategoryResponse, error) {

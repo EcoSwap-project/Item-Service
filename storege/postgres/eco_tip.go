@@ -2,11 +2,20 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 
 	exchange "item_service/genproto/item_service"
 
 	"github.com/google/uuid"
 )
+
+type EcoTipRepo struct {
+	db *sql.DB
+}
+
+func NewEcoTipRepository(db *sql.DB) *EcoTipRepo {
+	return &EcoTipRepo{db}
+}
 
 // Eco Tips
 func (r *EcoExchangeRepo) AddEcoTip(ctx context.Context, req *exchange.AddEcoTipRequest) (*exchange.AddEcoTipResponse, error) {

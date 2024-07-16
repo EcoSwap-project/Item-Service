@@ -2,12 +2,22 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 
 	exchange "item_service/genproto/item_service"
 
 	"github.com/google/uuid"
 	"github.com/lib/pq"
 )
+
+type RecyclingCenterRepo struct{
+	db *sql.DB
+}
+
+func NewRecyclingCenterRepository(db *sql.DB) *RecyclingCenterRepo {
+	return &RecyclingCenterRepo{db}
+}
+
 
 // Recycling Centers
 func (r *EcoExchangeRepo) AddRecyclingCenter(ctx context.Context, req *exchange.AddRecyclingCenterRequest) (*exchange.AddRecyclingCenterResponse, error) {

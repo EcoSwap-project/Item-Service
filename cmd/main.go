@@ -34,22 +34,24 @@ func main() {
 
 	log.Println("Server started on port " + config.URL_PORT)
 
-	userConn, err := grpc.NewClient(":50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// Connect to the user service
+	userConn, err := grpc.Dial(":50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal("Cannot connect to user connection on 50051" + err.Error())
 	}
-
+	defer userConn.Close()
 	userClient := user.NewEcoServiceClient(userConn)
+
+	
 
 	s := grpc.NewServer()
 
 	// Initialize repository and services
-	rs := services.NewMainService(db, userClient)
+	rs := services.NewMainService(db, userClient) // Pass the itemClient here
 
 	// Create a new gRPC server
 
-	// Register the ReservationServiceServer with the gRPC server
-	pb.RegisterEcoExchangeServiceServer(s, rs.)
+	pb.RegisterEcoExchangeServiceServer(s, rs)
 
 	// Register reflection service on gRPC server
 	reflection.Register(s)

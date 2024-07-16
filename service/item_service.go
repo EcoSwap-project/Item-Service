@@ -2,47 +2,72 @@ package services
 
 import (
 	"context"
-	"item_service/genproto/item_service"
-	repository"item_service/storege/postgres"
+
+	eco "item_service/genproto/item_service"
+	repo "item_service/storege/postgres"
 )
 
 type ItemService interface {
-	AddItem(context.Context, *item_service.AddItemRequest) (*item_service.AddItemResponse, error)
-	UpdateItem(context.Context, *item_service.UpdateItemRequest) (*item_service.UpdateItemResponse, error)
-	DeleteItem(context.Context, *item_service.DeleteItemRequest) (*item_service.DeleteItemResponse, error)
-	GetItems(context.Context, *item_service.GetItemsRequest) (*item_service.GetItemsResponse, error)
-	GetItem(context.Context, *item_service.GetItemRequest) (*item_service.GetItemResponse, error)
-	SearchItems(context.Context, *item_service.SearchItemsRequest) (*item_service.SearchItemsResponse, error)
+	AddItem(context.Context, *eco.AddItemRequest) (*eco.AddItemResponse, error)
+	UpdateItem(context.Context, *eco.UpdateItemRequest) (*eco.UpdateItemResponse, error)
+	DeleteItem(context.Context, *eco.DeleteItemRequest) (*eco.DeleteItemResponse, error)
+	GetItems(context.Context, *eco.GetItemsRequest) (*eco.GetItemsResponse, error)
+	GetItem(context.Context, *eco.GetItemRequest) (*eco.GetItemResponse, error)
+	SearchItems(context.Context, *eco.SearchItemsRequest) (*eco.SearchItemsResponse, error)
 }
 
 type itemServiceImpl struct {
-	repo *repository.ItemRepo
+	repo repo.ItemRepository
 }
 
-func NewItemService(repo *repository.ItemRepo) ItemService {
+func NewItemService(repo repo.ItemRepository) ItemService {
 	return &itemServiceImpl{repo: repo}
 }
 
-func (is *itemServiceImpl) AddItem(ctx context.Context, req *item_service.AddItemRequest) (*item_service.AddItemResponse, error) {
-	return is.repo.AddItem(ctx, req)
+func (s *itemServiceImpl) AddItem(ctx context.Context, req *eco.AddItemRequest) (*eco.AddItemResponse, error) {
+	item, err := s.repo.AddItem(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.AddItemResponse{Item: item.Item}, nil
 }
 
-func (is *itemServiceImpl) UpdateItem(ctx context.Context, req *item_service.UpdateItemRequest) (*item_service.UpdateItemResponse, error) {
-	return is.repo.UpdateItem(ctx, req)
+func (s *itemServiceImpl) UpdateItem(ctx context.Context, req *eco.UpdateItemRequest) (*eco.UpdateItemResponse, error) {
+	item, err := s.repo.UpdateItem(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.UpdateItemResponse{Item: item.Item}, nil
 }
 
-func (is *itemServiceImpl) DeleteItem(ctx context.Context, req *item_service.DeleteItemRequest) (*item_service.DeleteItemResponse, error) {
-	return is.repo.DeleteItem(ctx, req)
+func (s *itemServiceImpl) DeleteItem(ctx context.Context, req *eco.DeleteItemRequest) (*eco.DeleteItemResponse, error) {
+	_,err := s.repo.DeleteItem(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.DeleteItemResponse{Message: "Item deleted successfully"}, nil
 }
 
-func (is *itemServiceImpl) GetItems(ctx context.Context, req *item_service.GetItemsRequest) (*item_service.GetItemsResponse, error) {
-	return is.repo.GetItems(ctx, req)
+func (s *itemServiceImpl) GetItems(ctx context.Context, req *eco.GetItemsRequest) (*eco.GetItemsResponse, error) {
+	items, err := s.repo.GetItems(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.GetItemsResponse{Items: items.Items,  Page: req.Page, Limit: req.Limit}, nil
 }
 
-func (is *itemServiceImpl) GetItem(ctx context.Context, req *item_service.GetItemRequest) (*item_service.GetItemResponse, error) {
-	return is.repo.GetItem(ctx, req)
+func (s *itemServiceImpl) GetItem(ctx context.Context, req *eco.GetItemRequest) (*eco.GetItemResponse, error) {
+	item, err := s.repo.GetItem(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.GetItemResponse{Item: item.Item}, nil
 }
 
-func (is *itemServiceImpl) SearchItems(ctx context.Context, req *item_service.SearchItemsRequest) (*item_service.SearchItemsResponse, error) {
-	return is.repo.SearchItems(ctx, req)
+func (s *itemServiceImpl) SearchItems(ctx context.Context, req *eco.SearchItemsRequest) (*eco.SearchItemsResponse, error) {
+	items, err := s.repo.SearchItems(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.SearchItemsResponse{Items: items.Items,  Page: req.Page, Limit: req.Limit}, nil
 }

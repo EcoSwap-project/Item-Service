@@ -2,28 +2,36 @@ package services
 
 import (
 	"context"
-	"item_service/genproto/item_service"
-	repository"item_service/storege/postgres"
+
+	eco "item_service/genproto/item_service"
+	repo "item_service/storege/postgres"
 )
 
-
-type RatingService interface {
-	AddUserRating(context.Context, *item_service.AddUserRatingRequest) (*item_service.AddUserRatingResponse, error)
-	GetUserRatings(context.Context, *item_service.GetUserRatingsRequest) (*item_service.GetUserRatingsResponse, error)
+type UserRatingService interface {
+	RateUser(context.Context, *eco.AddUserRatingRequest) (*eco.AddUserRatingResponse, error)
+	GetUserRatings(context.Context, *eco.GetUserRatingsRequest) (*eco.GetUserRatingsResponse, error)
 }
 
-type ratingServiceImpl struct {
-	repo *repository.RatingRepo
+type userRatingServiceImpl struct {
+	repo repo.UserRatingRepository
 }
 
-func NewRatingService(repo *repository.RatingRepo) RatingService {
-	return &ratingServiceImpl{repo: repo}
+func NewUserRatingService(repo repo.UserRatingRepository) UserRatingService {
+	return &userRatingServiceImpl{repo: repo}
 }
 
-func (rs *ratingServiceImpl) AddUserRating(ctx context.Context, req *item_service.AddUserRatingRequest) (*item_service.AddUserRatingResponse, error) {
-	return rs.repo.AddUserRating(ctx, req)
+func (s *userRatingServiceImpl) RateUser(ctx context.Context, req *eco.AddUserRatingRequest) (*eco.AddUserRatingResponse, error) {
+	rating, err := s.repo.AddUserRating(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.AddUserRatingResponse{Rating: rating.Rating}, nil
 }
 
-func (rs *ratingServiceImpl) GetUserRatings(ctx context.Context, req *item_service.GetUserRatingsRequest) (*item_service.GetUserRatingsResponse, error) {
-	return rs.repo.GetUserRatings(ctx, req)
+func (s *userRatingServiceImpl) GetUserRatings(ctx context.Context, req *eco.GetUserRatingsRequest) (*eco.GetUserRatingsResponse, error) {
+	ratings,  err := s.repo.GetUserRatings(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &eco.GetUserRatingsResponse{Ratings: ratings.Ratings, Page: req.Page, Limit: req.Limit}, nil
 }

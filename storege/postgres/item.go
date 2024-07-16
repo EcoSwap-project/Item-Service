@@ -14,6 +14,10 @@ type EcoExchangeRepo struct {
 	db *sql.DB
 }
 
+func NewItemRepo(db *sql.DB) *EcoExchangeRepo {
+	return &EcoExchangeRepo{db}
+}
+
 // Items
 func (r *EcoExchangeRepo) AddItem(ctx context.Context, req *exchange.AddItemRequest) (*exchange.AddItemResponse, error) {
 	query := `

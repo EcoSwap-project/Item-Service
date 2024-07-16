@@ -1,54 +1,85 @@
 package services
 
 import (
-	"context"
 	"database/sql"
-	"item_service/genproto/authentication_service"
-	"item_service/genproto/item_service"
-
-	repository "item_service/storege/postgres"
+	eco "item_service/genproto/item_service"
+	user "item_service/genproto/authentication_service"
+	repo "item_service/storege/postgres"
 )
 
 type MainService interface {
 	ItemService() ItemService
 	SwapService() SwapService
 	RecyclingCenterService() RecyclingCenterService
-	RatingService() RatingService
-	EcoChallenge() ChallengesService
+	UserRatingService() UserRatingService
+	ItemCategoryService() ItemCategoryService
+	StatisticsService() StatisticsService
+	UserActivityService() UserActivityService
+	EcoChallengeService() EcoChallengeService
+	EcoTipService() EcoTipService
 }
 
 type mainServiceImpl struct {
-	authClient             authentication_service.EcoServiceClient
+	eco.UnimplementedEcoExchangeServiceServer
+	authClient             user.EcoServiceClient
 	itemService            ItemService
 	swapService            SwapService
 	recyclingCenterService RecyclingCenterService
-	ratingService          RatingService
-	challenge          ChallengesService
+	userRatingService      UserRatingService
+	itemCategoryService    ItemCategoryService
+	statisticsService      StatisticsService
+	userActivityService    UserActivityService
+	ecoChallengeService    EcoChallengeService
+	ecoTipService          EcoTipService
 }
 
-func NewMainService(db *sql.DB, authClient authentication_service.EcoServiceClient) MainService {
+func NewMainService(db *sql.DB, userClient user.EcoServiceClient) *mainServiceImpl {
 	return &mainServiceImpl{
-		authClient:             authClient,
-		itemService:            NewItemService(repository.NewItemRepo(db)),
-		swapService:            NewSwapService(repository.NewSwapRepo(db)),
-		recyclingCenterService: NewRecyclingCenterService(repository.NewRecyclingCenterRepo(db)),
-		ratingService:          NewRatingService(repository.NewRatingRepo(db)),
-		challenge: NewChallengesService(repository.NewChallengeRepo(db)),
+		authClient:             userClient,
+		itemService:            NewItemService(repo.NewItemRepo(db)),
+		swapService:            NewSwapService(repo.NewSwapRepo(db)),
+		recyclingCenterService: NewRecyclingCenterService(repo.NewRecyclingCenterRepository(db)),
+		userRatingService:      NewUserRatingService(repo.NewRatingRepo(db)),
+		itemCategoryService:    NewItemCategoryService(repo.NewItemCategoryRepository(db)),
+		statisticsService:      NewStatisticsService(repo.NewStatisticsRepository(db)),
+		userActivityService:    NewUserActivityService(repo.NewUserActivityRepository(db)),
+		ecoChallengeService:    NewEcoChallengeService(repo.NewEcoChallengeRepository(db)),
+		ecoTipService:          NewEcoTipService(repo.NewEcoTipRepository(db)),
 	}
 }
 
-func (ms *mainServiceImpl) ItemService() ItemService {
-	return ms.itemService
+func (s *mainServiceImpl) ItemService() ItemService {
+	return s.itemService
 }
 
-func (ms *mainServiceImpl) SwapService() SwapService {
-	return ms.swapService
+func (s *mainServiceImpl) SwapService() SwapService {
+	return s.swapService
 }
 
-func (ms *mainServiceImpl) RecyclingCenterService() RecyclingCenterService {
-	return ms.recyclingCenterService
+func (s *mainServiceImpl) RecyclingCenterService() RecyclingCenterService {
+	return s.recyclingCenterService
 }
 
-func (ms *mainServiceImpl) RatingService() RatingService {
-	return ms.ratingService
+func (s *mainServiceImpl) UserRatingService() UserRatingService {
+	return s.userRatingService
+}
+
+func (s *mainServiceImpl) ItemCategoryService() ItemCategoryService {
+	return s.itemCategoryService
+}
+
+func (s *mainServiceImpl) StatisticsService() StatisticsService {
+	return s.statisticsService
+}
+
+func (s *mainServiceImpl) UserActivityService() UserActivityService {
+	return s.userActivityService
+}
+
+func (s *mainServiceImpl) EcoChallengeService() EcoChallengeService {
+	return s.ecoChallengeService
+}
+
+func (s *mainServiceImpl) EcoTipService() EcoTipService {
+	return s.ecoTipService
 }

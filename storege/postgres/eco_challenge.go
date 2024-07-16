@@ -2,11 +2,20 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 
 	exchange "item_service/genproto/item_service"
 
 	"github.com/google/uuid"
 )
+
+type EcoChallengeRepo struct {
+	db *sql.DB
+}
+
+func NewEcoChallengeRepository(db *sql.DB) *EcoChallengeRepo {
+	return &EcoChallengeRepo{db}
+}
 
 // Eco Challenges
 func (r *EcoExchangeRepo) AddEcoChallenge(ctx context.Context, req *exchange.AddEcoChallengeRequest) (*exchange.AddEcoChallengeResponse, error) {
@@ -19,7 +28,7 @@ func (r *EcoExchangeRepo) AddEcoChallenge(ctx context.Context, req *exchange.Add
 	row := r.db.QueryRowContext(ctx, query, id, req.Title, req.Description, req.StartDate, req.EndDate, req.RewardPoints)
 
 	var challenge exchange.EcoChallenge
-	err := row.Scan(&challenge.Id, &challenge.Title, &challenge.Description, &challenge.StartDate, &challenge.EndDate, &challenge.RewardPoints, &challenge.CreatedAt )
+	err := row.Scan(&challenge.Id, &challenge.Title, &challenge.Description, &challenge.StartDate, &challenge.EndDate, &challenge.RewardPoints, &challenge.CreatedAt)
 	if err != nil {
 		return nil, err
 	}

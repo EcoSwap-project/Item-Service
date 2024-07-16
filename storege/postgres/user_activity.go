@@ -2,9 +2,18 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 
 	exchange "item_service/genproto/item_service"
 )
+
+type userActivityRepo struct {
+	db *sql.DB
+}
+
+func NewUserActivityRepository(db *sql.DB) *userActivityRepo {
+	return &userActivityRepo{db}
+}
 
 // User Activity
 func (r *EcoExchangeRepo) GetUserActivity(ctx context.Context, req *exchange.GetUserActivityRequest) (*exchange.GetUserActivityResponse, error) {
