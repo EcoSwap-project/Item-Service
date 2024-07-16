@@ -1,8 +1,10 @@
 package services
 
 import (
+	"context"
 	"database/sql"
 	"item_service/genproto/authentication_service"
+	"item_service/genproto/item_service"
 
 	repository "item_service/storege/postgres"
 )
@@ -12,6 +14,7 @@ type MainService interface {
 	SwapService() SwapService
 	RecyclingCenterService() RecyclingCenterService
 	RatingService() RatingService
+	EcoChallenge() ChallengesService
 }
 
 type mainServiceImpl struct {
@@ -20,6 +23,7 @@ type mainServiceImpl struct {
 	swapService            SwapService
 	recyclingCenterService RecyclingCenterService
 	ratingService          RatingService
+	challenge          ChallengesService
 }
 
 func NewMainService(db *sql.DB, authClient authentication_service.EcoServiceClient) MainService {
@@ -29,6 +33,7 @@ func NewMainService(db *sql.DB, authClient authentication_service.EcoServiceClie
 		swapService:            NewSwapService(repository.NewSwapRepo(db)),
 		recyclingCenterService: NewRecyclingCenterService(repository.NewRecyclingCenterRepo(db)),
 		ratingService:          NewRatingService(repository.NewRatingRepo(db)),
+		challenge: NewChallengesService(repository.NewChallengeRepo(db)),
 	}
 }
 

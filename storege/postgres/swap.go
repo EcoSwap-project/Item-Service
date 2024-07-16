@@ -23,7 +23,7 @@ func (r *SwapRepo) CreateSwap(ctx context.Context, req *item_service.CreateSwapR
 	updatedAt := createdAt
 
 	query := `
-		INSERT INTO swaps (id, offered_item_id, requested_item_id, requester_id, owner_id, status, message, created_at, updated_at) 
+		INSERT INTO swaps (id, offered_item_id, requested_item_id, requester_id, owner_id, status, message) 
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 	`
 
@@ -52,7 +52,7 @@ func (r *SwapRepo) UpdateSwapStatus(ctx context.Context, req *item_service.Updat
 	query := `
 		UPDATE swaps 
 		SET status = $1, message = $2, updated_at = $3 
-		WHERE id = $4
+		WHERE id = $4 and deleted_at is null
 		RETURNING id, offered_item_id, requested_item_id, requester_id, owner_id, status, message, created_at, updated_at
 	`
 	var swap item_service.Swap
@@ -71,7 +71,7 @@ func (r *SwapRepo) GetSwaps(ctx context.Context, req *item_service.GetSwapsReque
 	query := `
 		SELECT id, offered_item_id, requested_item_id, requester_id, owner_id, status, message, created_at, updated_at 
 		FROM swaps 
-		WHERE status = $1 
+		WHERE status = $1 and deleted_at is null
 		LIMIT $2 OFFSET $3
 	`
 	rows, err := r.db.QueryContext(ctx, query, req.Status, req.Limit, req.Page*req.Limit)
