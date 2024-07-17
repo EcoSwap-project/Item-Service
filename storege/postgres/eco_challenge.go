@@ -18,7 +18,7 @@ func NewEcoChallengeRepository(db *sql.DB) *EcoChallengeRepo {
 }
 
 // Eco Challenges
-func (r *EcoExchangeRepo) AddEcoChallenge(ctx context.Context, req *exchange.AddEcoChallengeRequest) (*exchange.AddEcoChallengeResponse, error) {
+func (r *EcoChallengeRepo) AddEcoChallenge(ctx context.Context, req *exchange.AddEcoChallengeRequest) (*exchange.AddEcoChallengeResponse, error) {
 	query := `
 		INSERT INTO eco_challenges (id, title, description, start_date, end_date, reward_points)
 		VALUES ($1, $2, $3, $4, $5, $6)
@@ -36,7 +36,7 @@ func (r *EcoExchangeRepo) AddEcoChallenge(ctx context.Context, req *exchange.Add
 	return &exchange.AddEcoChallengeResponse{Challenge: &challenge}, nil
 }
 
-func (r *EcoExchangeRepo) ParticipateEcoChallenge(ctx context.Context, req *exchange.ParticipateEcoChallengeRequest) (*exchange.ParticipateEcoChallengeResponse, error) {
+func (r *EcoChallengeRepo) ParticipateEcoChallenge(ctx context.Context, req *exchange.ParticipateEcoChallengeRequest) (*exchange.ParticipateEcoChallengeResponse, error) {
 	query := `
 		INSERT INTO eco_challenge_participants (id, challenge_id, user_id, status)
 		VALUES ($1, $2, $3, $4)
@@ -54,7 +54,7 @@ func (r *EcoExchangeRepo) ParticipateEcoChallenge(ctx context.Context, req *exch
 	return &exchange.ParticipateEcoChallengeResponse{}, nil
 }
 
-func (r *EcoExchangeRepo) UpdateEcoChallengeProgress(ctx context.Context, req *exchange.UpdateEcoChallengeProgressRequest) (*exchange.UpdateEcoChallengeProgressResponse, error) {
+func (r *EcoChallengeRepo) UpdateEcoChallengeProgress(ctx context.Context, req *exchange.UpdateEcoChallengeProgressRequest) (*exchange.UpdateEcoChallengeProgressResponse, error) {
 	// Implement logic to update eco challenge progress
 	// This is a placeholder function for demonstration purposes
 	return nil, nil

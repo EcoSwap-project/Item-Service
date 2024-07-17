@@ -18,7 +18,7 @@ func NewEcoTipRepository(db *sql.DB) *EcoTipRepo {
 }
 
 // Eco Tips
-func (r *EcoExchangeRepo) AddEcoTip(ctx context.Context, req *exchange.AddEcoTipRequest) (*exchange.AddEcoTipResponse, error) {
+func (r *EcoTipRepo) AddEcoTip(ctx context.Context, req *exchange.AddEcoTipRequest) (*exchange.AddEcoTipResponse, error) {
 	query := `
 		INSERT INTO eco_tips (id, title, content, created_at, updated_at)
 		VALUES ($1, $2, $3, now(), now())
@@ -36,7 +36,7 @@ func (r *EcoExchangeRepo) AddEcoTip(ctx context.Context, req *exchange.AddEcoTip
 	return &exchange.AddEcoTipResponse{Tip: &tip}, nil
 }
 
-func (r *EcoExchangeRepo) GetEcoTips(ctx context.Context, req *exchange.GetEcoTipsRequest) (*exchange.GetEcoTipsResponse, error) {
+func (r *EcoTipRepo) GetEcoTips(ctx context.Context, req *exchange.GetEcoTipsRequest) (*exchange.GetEcoTipsResponse, error) {
 	query := `
 		SELECT id, title, content, created_at, updated_at
 		FROM eco_tips

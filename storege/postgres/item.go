@@ -10,16 +10,16 @@ import (
 	"github.com/lib/pq"
 )
 
-type EcoExchangeRepo struct {
+type ItemRepo struct {
 	db *sql.DB
 }
 
-func NewItemRepo(db *sql.DB) *EcoExchangeRepo {
-	return &EcoExchangeRepo{db}
+func NewItemRepo(db *sql.DB) *ItemRepo {
+	return &ItemRepo{db}
 }
 
 // Items
-func (r *EcoExchangeRepo) AddItem(ctx context.Context, req *exchange.AddItemRequest) (*exchange.AddItemResponse, error) {
+func (r *ItemRepo) AddItem(ctx context.Context, req *exchange.AddItemRequest) (*exchange.AddItemResponse, error) {
 	query := `
 		INSERT INTO items (id, name, description, category_id, condition, swap_preference, images, owner_id, status, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, now(), now())
@@ -37,7 +37,7 @@ func (r *EcoExchangeRepo) AddItem(ctx context.Context, req *exchange.AddItemRequ
 	return &exchange.AddItemResponse{Item: &item}, nil
 }
 
-func (r *EcoExchangeRepo) UpdateItem(ctx context.Context, req *exchange.UpdateItemRequest) (*exchange.UpdateItemResponse, error) {
+func (r *ItemRepo) UpdateItem(ctx context.Context, req *exchange.UpdateItemRequest) (*exchange.UpdateItemResponse, error) {
 	query := `
 		UPDATE items
 		SET name = $1, condition = $2, updated_at = now()
@@ -55,7 +55,7 @@ func (r *EcoExchangeRepo) UpdateItem(ctx context.Context, req *exchange.UpdateIt
 	return &exchange.UpdateItemResponse{Item: &item}, nil
 }
 
-func (r *EcoExchangeRepo) DeleteItem(ctx context.Context, req *exchange.DeleteItemRequest) (*exchange.DeleteItemResponse, error) {
+func (r *ItemRepo) DeleteItem(ctx context.Context, req *exchange.DeleteItemRequest) (*exchange.DeleteItemResponse, error) {
 	query := `
 		UPDATE items
 		SET deleted_at = now()
@@ -69,7 +69,7 @@ func (r *EcoExchangeRepo) DeleteItem(ctx context.Context, req *exchange.DeleteIt
 	return &exchange.DeleteItemResponse{Message: "Item deleted successfully"}, nil
 }
 
-func (r *EcoExchangeRepo) GetItems(ctx context.Context, req *exchange.GetItemsRequest) (*exchange.GetItemsResponse, error) {
+func (r *ItemRepo) GetItems(ctx context.Context, req *exchange.GetItemsRequest) (*exchange.GetItemsResponse, error) {
 	query := `
 		SELECT id, name, description, category_id, condition, swap_preference, owner_id, status, created_at, updated_at
 		FROM items WHERE deleted_at is null
@@ -105,7 +105,7 @@ func (r *EcoExchangeRepo) GetItems(ctx context.Context, req *exchange.GetItemsRe
 	}, nil
 }
 
-func (r *EcoExchangeRepo) GetItem(ctx context.Context, req *exchange.GetItemRequest) (*exchange.GetItemResponse, error) {
+func (r *ItemRepo) GetItem(ctx context.Context, req *exchange.GetItemRequest) (*exchange.GetItemResponse, error) {
 	query := `
 		SELECT id, name, description, category_id, condition, swap_preference, owner_id, status, created_at, updated_at
 		FROM items
@@ -122,7 +122,7 @@ func (r *EcoExchangeRepo) GetItem(ctx context.Context, req *exchange.GetItemRequ
 	return &exchange.GetItemResponse{Item: &item}, nil
 }
 
-func (r *EcoExchangeRepo) SearchItems(ctx context.Context, req *exchange.SearchItemsRequest) (*exchange.SearchItemsResponse, error) {
+func (r *ItemRepo) SearchItems(ctx context.Context, req *exchange.SearchItemsRequest) (*exchange.SearchItemsResponse, error) {
 	query := `
 		SELECT id, name, description, category_id, condition, swap_preference, owner_id, status, created_at, updated_at
 		FROM items

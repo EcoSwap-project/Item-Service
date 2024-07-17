@@ -18,7 +18,7 @@ func NewItemCategoryRepository(db *sql.DB) *itemCategoryRepo {
 }
 
 // Item Categories
-func (r *EcoExchangeRepo) AddItemCategory(ctx context.Context, req *exchange.AddItemCategoryRequest) (*exchange.AddItemCategoryResponse, error) {
+func (r *itemCategoryRepo) AddItemCategory(ctx context.Context, req *exchange.AddItemCategoryRequest) (*exchange.AddItemCategoryResponse, error) {
 	query := `
 		INSERT INTO item_categories (id, name, description)
 		VALUES ($1, $2, $3)

@@ -16,7 +16,7 @@ func NewUserActivityRepository(db *sql.DB) *userActivityRepo {
 }
 
 // User Activity
-func (r *EcoExchangeRepo) GetUserActivity(ctx context.Context, req *exchange.GetUserActivityRequest) (*exchange.GetUserActivityResponse, error) {
+func (r *userActivityRepo) GetUserActivity(ctx context.Context, req *exchange.GetUserActivityRequest) (*exchange.GetUserActivityResponse, error) {
 	// Implement your logic to fetch user activity from your database or external service here
 	// This is a placeholder function for demonstration purposes
 	return nil, nil

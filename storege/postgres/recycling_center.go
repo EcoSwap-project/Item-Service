@@ -20,7 +20,7 @@ func NewRecyclingCenterRepository(db *sql.DB) *RecyclingCenterRepo {
 
 
 // Recycling Centers
-func (r *EcoExchangeRepo) AddRecyclingCenter(ctx context.Context, req *exchange.AddRecyclingCenterRequest) (*exchange.AddRecyclingCenterResponse, error) {
+func (r *RecyclingCenterRepo) AddRecyclingCenter(ctx context.Context, req *exchange.AddRecyclingCenterRequest) (*exchange.AddRecyclingCenterResponse, error) {
 	query := `
 		INSERT INTO recycling_centers (id, name, address, accepted_materials, working_hours, contact_number)
 		VALUES ($1, $2, $3, $4, $5, $6)
@@ -38,7 +38,7 @@ func (r *EcoExchangeRepo) AddRecyclingCenter(ctx context.Context, req *exchange.
 	return &exchange.AddRecyclingCenterResponse{Center: &center}, nil
 }
 
-func (r *EcoExchangeRepo) GetRecyclingCenters(ctx context.Context, req *exchange.GetRecyclingCentersRequest) (*exchange.GetRecyclingCentersResponse, error) {
+func (r *RecyclingCenterRepo) GetRecyclingCenters(ctx context.Context, req *exchange.GetRecyclingCentersRequest) (*exchange.GetRecyclingCentersResponse, error) {
 	query := `
 		SELECT id, name, address, contact_info, created_at, updated_at
 		FROM recycling_centers
@@ -75,7 +75,7 @@ func (r *EcoExchangeRepo) GetRecyclingCenters(ctx context.Context, req *exchange
 	}, nil
 }
 
-func (r *EcoExchangeRepo) AddRecyclingSubmission(ctx context.Context, req *exchange.AddRecyclingSubmissionRequest) (*exchange.AddRecyclingSubmissionResponse, error) {
+func (r *RecyclingCenterRepo) AddRecyclingSubmission(ctx context.Context, req *exchange.AddRecyclingSubmissionRequest) (*exchange.AddRecyclingSubmissionResponse, error) {
 	query := `
 		INSERT INTO recycling_submissions (id, user_id, center_id, items, eco_points_earned)
 		VALUES ($1, $2, $3, $4, $5)

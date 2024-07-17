@@ -2,8 +2,8 @@ package services
 
 import (
 	"database/sql"
-	eco "item_service/genproto/item_service"
 	user "item_service/genproto/authentication_service"
+	eco "item_service/genproto/item_service"
 	repo "item_service/storege/postgres"
 )
 
